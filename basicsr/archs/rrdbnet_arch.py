@@ -104,15 +104,15 @@ class RRDBNet(nn.Module):
 
     def forward(self, x):
         with torch.no_grad():
-	    if self.scale == 2:
-	        feat = pixel_unshuffle(x, scale=2)
-	    elif self.scale == 1:
-	        feat = pixel_unshuffle(x, scale=4)
-	    else:
-	        feat = x
-	    feat = self.conv_first(feat)
-	    body_feat = self.conv_body(self.body(feat))
-	    feat = feat + body_feat
+            if self.scale == 2:
+                feat = pixel_unshuffle(x, scale=2)
+            elif self.scale == 1:
+                feat = pixel_unshuffle(x, scale=4)
+            else:
+                feat = x
+            feat = self.conv_first(feat)
+            body_feat = self.conv_body(self.body(feat))
+            feat = feat + body_feat
         # upsample
         feat = self.lrelu(self.conv_up1(F.interpolate(feat, scale_factor=2, mode='nearest')))
         feat = self.lrelu(self.conv_up2(F.interpolate(feat, scale_factor=2, mode='nearest')))
